@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 		electronComponent DeviceInfo = DeviceSet[i];
         vector<vector<Point>> tmp;
         tmp.push_back(DeviceSet[i].contours);
-        drawContours(SrcCopy,tmp,0,Scalar(0),CV_FILLED);
+       // drawContours(SrcCopy,tmp,0,Scalar(255),CV_FILLED);
         drawContours(srcB, tmp, 0, Scalar(0),CV_FILLED);
 	    circle(SrcCopy,Point(DeviceInfo.LinkLineOne[0],DeviceInfo.LinkLineOne[1]),5,Scalar(0,0,255),CV_FILLED);
 		circle(SrcCopy,Point(DeviceInfo.LinkLineOne[2],DeviceInfo.LinkLineOne[3]),5,Scalar(0,0,255),CV_FILLED);
@@ -39,25 +39,16 @@ int main(int argc, char** argv)
 		circle(SrcCopy,Point(DeviceInfo.LinkLineTwo[2],DeviceInfo.LinkLineTwo[3]),5,Scalar(0,0,255),CV_FILLED);
 		circle(SrcCopy,DeviceInfo.center,DeviceInfo.radius,Scalar(0,0,255),3);
 	}
-    
-    vector<Cline> lines;
-    getEndPointOfLine(cimg,lines);
-    
-    
-    for(int i = 0;i < lines.size() ;i++)
-    {
-        for(int j = 0;j < lines[i].endPoint.size();j++){
-            circle(SrcCopy,lines[i].endPoint[j],5,Scalar(0,0,255),CV_FILLED);
+
+    vector<Cline> circuitLines;
+    getEndPointOfLine(cimg, srcB, circuitLines);
+    for(int i = 0;i < circuitLines.size() ;i++){
+        for(int j = 0;j < circuitLines[i].endPoint.size();j++){
+            circle(SrcCopy,circuitLines[i].endPoint[j],5,Scalar(0,255,0),CV_FILLED);
         }
         
     }
-    
-    //imshow("LineEndPoint",SrcCopy);
-    //waitKey();
-
-    vector<Cline> linesB;
-    getEndPointOfLine(cimg, srcB, linesB);
-    
-    
+    imshow("srcCopy", SrcCopy);
+    waitKey();
     return 0;
 }

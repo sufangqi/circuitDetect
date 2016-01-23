@@ -214,7 +214,7 @@ void  getEndPointOfLine(const Mat & src,vector<Cline> & lines){
         }
     }
 }
-void getEndPointOfLine(const Mat &src,const Mat & srcB,vector<Cline> & lines){
+void getEndPointOfLine(const Mat &src,const Mat & srcB,vector<Cline> &circuitLines){
     
     //binary
     Mat binary;
@@ -231,6 +231,7 @@ void getEndPointOfLine(const Mat &src,const Mat & srcB,vector<Cline> & lines){
     Mat copyBin;
     bin.copyTo(copyBin);
     findContours(copyBin, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
+    vector<Cline> lines;
     for (size_t i = 0; i < contours.size(); i++) {
         if (contours[i].size() < 10) {
             continue;
@@ -276,11 +277,6 @@ void getEndPointOfLine(const Mat &src,const Mat & srcB,vector<Cline> & lines){
         semi.radius = radius;
         semicircles.push_back(semi);
     }
-#ifdef _SHOW_2
-    imshow("binaryb", binaryB);
-    imshow("rgb", binaryBrgb);
-    waitKey();
-#endif
     //连接曲线与半圆
     //1 首先将连接的直线连接起来
     vector<Cline> newLines;
@@ -310,7 +306,6 @@ void getEndPointOfLine(const Mat &src,const Mat & srcB,vector<Cline> & lines){
     std::cout << "newLines: " << newLines.size() << std::endl;
 #endif
     //合并
-    vector<Cline> circuitLines;
     for (int i = 0; i < newLines.size() ; i++) {
         int flag = 0;
         for (int j = i+1; j < newLines.size(); j++) {
@@ -354,7 +349,7 @@ void getEndPointOfLine(const Mat &src,const Mat & srcB,vector<Cline> & lines){
         }
         circuitLines.push_back(newLines[i]);
     }
-#ifdef _SHOW_
+#ifdef _SHOW_2
     Mat rgb3 = src.clone();
     for (int i = 0; i < circuitLines.size(); i++) {
         for (int j = 0 ; j < circuitLines[i].numPoint; j++) {
